@@ -1,0 +1,35 @@
+<% layout( 'layout' ) -%>
+
+<h1 class="page-header"><%= title %></h1>
+
+<div id="list">
+  <form action="/create" method="post" accept-charset="utf-8" class="navbar-form form-create">
+    <div class="form-group">
+       Nome:<input class="form-control" type="text" name="name"  />
+      Sobrenome:<input class="form-control" type="text" name="lastName" />
+      Tarefa:<input class="form-control" type="text" name="content" />
+      <input type="submit" value="Gravar" class="btn btn-default">
+    </div>
+  </form>
+</div>
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Tarefas</div>
+
+  <!-- Table -->
+  <table class="table">
+  <tr>
+    <th>Tarefa</th>
+    <th>Deletar</th>
+  </tr>
+  <% todos.forEach( function ( todo ){ %>
+     <tr>
+        <td><a  href="/edit/<%= todo._id %>" title="Atualize este item"><%= todo.content %></a></td>
+        <td><a  href="/destroy/<%= todo._id %>" title="Delete este item">Delete</a></td>
+      </tr>
+  <% }); %>
+    
+  </table>
+</div>
+
