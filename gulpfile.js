@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins'),
     plugins = gulpLoadPlugins();
 
-
 gulp.task('css', function() {
 var cssPath = {cssSrc:['./public/stylesheets/*.css', '!*.min.css', '!/**/*.min.css'], cssDest:'public'};
   return gulp.src(cssPath.cssSrc)
