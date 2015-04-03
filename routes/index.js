@@ -20,6 +20,9 @@ exports.index = function ( req, res, next ){
 };
 
 exports.create = function ( req, res, next ){
+    req.checkBody('name', 'Nome é necessário').notEmpty();
+      var errors = req.validationErrors();
+
   new Todo({
       user_id    : req.cookies.user_id,
       content    : req.body.content,
@@ -29,7 +32,7 @@ exports.create = function ( req, res, next ){
   }).save( function ( err, todo, count ){
     if( err ) return next( err );
 
-    res.redirect( '/' );
+    res.render( '/' ,{errors: errors});
   });
 };
 
@@ -45,7 +48,7 @@ exports.destroy = function ( req, res, next ){
     todo.remove( function ( err, todo ){
       if( err ) return next( err );
 
-      res.redirect( '/' );
+      res.render( '/' );
     });
   });
 };
