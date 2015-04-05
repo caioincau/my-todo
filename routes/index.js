@@ -14,15 +14,19 @@ exports.index = function ( req, res, next ){
 
       res.render( 'index', {
           title : 'Minha lista de tarefas',
-          todos : todos
+          todos : todos,
       });
     });
 };
 
 exports.create = function ( req, res, next ){
-    req.checkBody('name', 'Nome é necessário').notEmpty();
-      var errors = req.validationErrors();
+      req.checkBody('name', 'Nome é necessário').notEmpty();
+      errors = req.validationErrors();
 
+     if (errors) {
+      res.status(400).render('erro400', { errors: errors ,title : "Página não encontrada"});
+      return;
+     }
   new Todo({
       user_id    : req.cookies.user_id,
       content    : req.body.content,
@@ -32,11 +36,12 @@ exports.create = function ( req, res, next ){
   }).save( function ( err, todo, count ){
     if( err ) return next( err );
 
-    res.render( '/' ,{errors: errors});
+    res.redirect( '/');
   });
 };
 
 exports.destroy = function ( req, res, next ){
+
   Todo.findById( req.params.id, function ( err, todo ){
     var user_id = req.cookies ?
       req.cookies.user_id : undefined;
@@ -48,7 +53,7 @@ exports.destroy = function ( req, res, next ){
     todo.remove( function ( err, todo ){
       if( err ) return next( err );
 
-      res.render( '/' );
+    res.redirect( '/');
     });
   });
 };

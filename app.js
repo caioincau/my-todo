@@ -40,12 +40,11 @@ app.use(static(path.join( __dirname, 'public')));
 if(env=="production"){
 	var accessLogStream = fs.createWriteStream(__dirname + '/urls.log', {flags: 'a'})
 	app.use(morgan('combined', {stream: accessLogStream}));
+	require( './config/errors' )(app);
 }else{
 	app.use(morgan());
 }
 
-
-require( './config/errors' )(app);
 http.createServer( app ).listen( app.get( 'port' ), function (){
   console.log( 'Express rodando na porta :  ' + app.get( 'port' ));
 });

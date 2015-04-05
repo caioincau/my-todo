@@ -1,0 +1,8 @@
+<% layout( 'layout' ) -%>
+
+<div class="container" >
+<% errors.forEach( function ( error ){ %>
+     <p class="alert alert-danger" role="alert"><%= error.msg %>
+  <% }); %>
+
+ </div>
