@@ -11,10 +11,15 @@ var static         = require('serve-static');
 var morgan = require('morgan');
 var fs = require('fs');
 var validator = require('express-validator');
+var compression = require('compression');
+var favicon = require('serve-favicon');
 
 
 var app    = express();
+app.use(favicon(__dirname + '/public/favicon.ico'));
+
 var routes = require( './routes' );
+
 
 
 app.set( 'port', process.env.PORT || 3001 );
@@ -34,8 +39,9 @@ app.get(  '/edit/:id',    routes.edit );
 app.post( '/update/:id',  routes.update );
 
 var env = app.get('env');
+app.use(compression({level: 9,memLevel: 9}));
+app.use(static(path.join( __dirname, 'public'),{maxAge: 31557600000/1000}));
 
-app.use(static(path.join( __dirname, 'public')));
 
 if(env=="production"){
 	var accessLogStream = fs.createWriteStream(__dirname + '/urls.log', {flags: 'a'})
