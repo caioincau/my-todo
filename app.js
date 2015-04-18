@@ -1,5 +1,9 @@
 require( './config/db' );
 
+var cluster = require('cluster');
+var numCPUs = require('os').cpus().length;
+
+
 var express        = require( 'express' );
 var http           = require( 'http' );
 var path           = require( 'path' );
@@ -15,11 +19,23 @@ var compression = require('compression');
 var favicon = require('serve-favicon');
 
 
-var app    = express();
-app.use(favicon(__dirname + '/public/favicon.ico'));
+if (cluster.isMaster) {
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  };
+} else if (cluster.isWorker) {
+  var app    = express();
+  app.use(favicon(__dirname + '/public/favicon.ico'));
 
 var routes = require( './routes' );
 
+ app.get('*', function(req, res,next) {
+      res.status(200);
+    console.log('cluster '
+      + cluster.worker.process.pid
+      + ' responded \n');
+    next();
+});
 
 
 app.set( 'port', process.env.PORT || 3001 );
@@ -48,9 +64,13 @@ if(env=="production"){
 	app.use(morgan('combined', {stream: accessLogStream}));
 	require( './config/errors' )(app);
 }else{
-	app.use(morgan());
+	app.use(morgan('web'));
 }
+
+
 
 http.createServer( app ).listen( app.get( 'port' ), function (){
   console.log( 'Express rodando na porta :  ' + app.get( 'port' ));
 });
+
+};
