@@ -5,6 +5,7 @@
 <div id="list">
   <form action="/create" method="post" accept-charset="utf-8" class="navbar-form form-create">
     <div class="form-group">
+      <input type='hidden'  name='_csrf' value=<%=_csrf%> />
        Nome:<input required="required"  class="form-control" type="text" name="name"  />
       Sobrenome:<input required="required"  class="form-control" type="text" name="lastName" />
       Tarefa:<input required="required"  class="form-control" type="text" name="content" />

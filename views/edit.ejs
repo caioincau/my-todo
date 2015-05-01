@@ -5,6 +5,7 @@
 <% todos.forEach( function ( todo ){ %>
     <form  action="/update/<%= todo._id %>" method="post" class=" form-create navbar-form navbar-left" accept-charset="utf-8">
     <div class="form-group">
+          <input type='hidden'  name='_csrf' value=<%=_csrf%> />
       Nome:<input required="required"  class="form-control" type="text" name="name" value="<%= todo.name %>" />
       Sobrenome:<input required="required"  class="form-control" type="text" name="lastName" value="<%= todo.lastName %>" />
       Tarefa:<input required="required" class="form-control" type="text" name="content" value="<%= todo.content %>"/>
